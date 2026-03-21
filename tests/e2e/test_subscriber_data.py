@@ -26,7 +26,8 @@ class TestSubscriberData:
         for sub in subs:
             assert isinstance(sub, Subscriber)
             assert sub.id > 0
-            print(f"    {sub.name} email={sub.email} payments={sub.payments} active={sub.is_active} paid={sub.is_paid}")
+            print(f"    {sub.name} email={sub.email} payments={sub.payments}")
+            print(f"      active={sub.is_active} paid={sub.is_paid}")
 
     async def test_iter_subscribers_typed(self, client: BoostyClient, blog_username: str) -> None:
         """Iterate over subscribers as typed models."""

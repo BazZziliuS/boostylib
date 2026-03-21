@@ -3,13 +3,14 @@
 from __future__ import annotations
 
 import asyncio
+import contextlib
 import logging
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from typing import TYPE_CHECKING, Any
 
 from boostylib.enums import EventType
 from boostylib.events.dispatcher import EventDispatcher
-from boostylib.events.models import CommentEvent, DonationEvent, Event, SubscriptionEvent
+from boostylib.events.models import CommentEvent, SubscriptionEvent
 from boostylib.models.user import User
 
 if TYPE_CHECKING:
@@ -72,17 +73,19 @@ class EventPoller:
             return
         self._running = True
         self._task = asyncio.create_task(self._poll_loop())
-        logger.info("Event poller started (interval=%.1fs, blog=%s)", self._settings.poll_interval, self._blog)
+        logger.info(
+            "Event poller started (interval=%.1fs, blog=%s)",
+            self._settings.poll_interval,
+            self._blog,
+        )
 
     async def stop(self) -> None:
         """Stop the polling loop."""
         self._running = False
         if self._task is not None:
             self._task.cancel()
-            try:
+            with contextlib.suppress(asyncio.CancelledError):
                 await self._task
-            except asyncio.CancelledError:
-                pass
             self._task = None
         logger.info("Event poller stopped")
 
@@ -122,7 +125,9 @@ class EventPoller:
             try:
                 page = await self._posts_api.list_posts(self._blog, limit=10)
                 for post in page.data:
-                    comment_page = await self._comments_api.get_comments(self._blog, post.id, limit=50)
+                    comment_page = await self._comments_api.get_comments(
+                        self._blog, post.id, limit=50
+                    )
                     self._known_comment_ids[post.id] = {c.id for c in comment_page.data}
                 logger.debug("Initial comments tracked for %d posts", len(self._known_comment_ids))
             except Exception:
@@ -146,25 +151,29 @@ class EventPoller:
             for uid in new_ids:
                 sub_data = current_subs[uid]
                 level_data = sub_data.get("level", {})
-                await self._dispatcher.dispatch(SubscriptionEvent(
-                    type=EventType.NEW_SUBSCRIPTION,
-                    blog_username=self._blog,
-                    timestamp=datetime.now(timezone.utc),
-                    user=User(id=uid, name=sub_data.get("name", "")),
-                    level=level_data,
-                ))
+                await self._dispatcher.dispatch(
+                    SubscriptionEvent(
+                        type=EventType.NEW_SUBSCRIPTION,
+                        blog_username=self._blog,
+                        timestamp=datetime.now(UTC),
+                        user=User(id=uid, name=sub_data.get("name", "")),
+                        level=level_data,
+                    )
+                )
                 logger.info("New subscriber: %s (id=%d)", sub_data.get("name", ""), uid)
 
             # Cancelled subscribers
             gone_ids = self._known_subscriber_ids - current_ids
             for uid in gone_ids:
-                await self._dispatcher.dispatch(SubscriptionEvent(
-                    type=EventType.SUBSCRIPTION_CANCELLED,
-                    blog_username=self._blog,
-                    timestamp=datetime.now(timezone.utc),
-                    user=User(id=uid, name=""),
-                    level={},
-                ))
+                await self._dispatcher.dispatch(
+                    SubscriptionEvent(
+                        type=EventType.SUBSCRIPTION_CANCELLED,
+                        blog_username=self._blog,
+                        timestamp=datetime.now(UTC),
+                        user=User(id=uid, name=""),
+                        level={},
+                    )
+                )
                 logger.info("Subscriber cancelled: id=%d", uid)
 
             self._known_subscriber_ids = current_ids
@@ -185,15 +194,19 @@ class EventPoller:
 
                 for comment in comment_page.data:
                     if comment.id not in known:
-                        await self._dispatcher.dispatch(CommentEvent(
-                            type=EventType.NEW_COMMENT,
-                            blog_username=self._blog,
-                            timestamp=datetime.now(timezone.utc),
-                            user=comment.author,
-                            post_id=post.id,
-                            comment_id=comment.id,
-                            content=comment.content if isinstance(comment.content, str) else comment.text,
-                        ))
+                        await self._dispatcher.dispatch(
+                            CommentEvent(
+                                type=EventType.NEW_COMMENT,
+                                blog_username=self._blog,
+                                timestamp=datetime.now(UTC),
+                                user=comment.author,
+                                post_id=post.id,
+                                comment_id=comment.id,
+                                content=comment.content
+                                if isinstance(comment.content, str)
+                                else comment.text,
+                            )
+                        )
                         logger.info("New comment on %s by %s", post.id, comment.author.name)
 
                 self._known_comment_ids[post.id] = {c.id for c in comment_page.data}

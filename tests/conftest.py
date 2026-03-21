@@ -42,7 +42,9 @@ def memory_storage(token_pair: TokenPair) -> MemoryTokenStorage:
 
 
 @pytest.fixture
-async def client(settings: BoostySettings, memory_storage: MemoryTokenStorage) -> AsyncIterator[BoostyClient]:
+async def client(
+    settings: BoostySettings, memory_storage: MemoryTokenStorage
+) -> AsyncIterator[BoostyClient]:
     async with BoostyClient(
         token_storage=memory_storage,
         settings=settings,

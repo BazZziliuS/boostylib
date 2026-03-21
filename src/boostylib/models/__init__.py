@@ -5,7 +5,7 @@ from boostylib.models.comment import Comment
 from boostylib.models.donation import Donation
 from boostylib.models.media import MediaFile
 from boostylib.models.pagination import PaginatedResponse
-from boostylib.models.post import AccessLevel, ContentBlock, Post, PostCreateRequest, PostTag
+from boostylib.models.post import AccessLevel, ContentBlock, Post, PostCreateRequest
 from boostylib.models.subscriber import Subscriber
 from boostylib.models.subscription import SubscriptionLevel, SubscriptionStatus, UserSubscription
 from boostylib.models.target import Target

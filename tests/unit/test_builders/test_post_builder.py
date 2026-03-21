@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 import pytest
 
@@ -22,12 +22,24 @@ class TestPostBuilder:
         assert post.content[0].content == "Hello world"
 
     def test_post_with_subscription_level(self) -> None:
-        post = PostBuilder().title("Premium only").text("Secret").access_level(level_id="level_123").build()
+        post = (
+            PostBuilder()
+            .title("Premium only")
+            .text("Secret")
+            .access_level(level_id="level_123")
+            .build()
+        )
         assert post.access_type == PostAccess.SUBSCRIPTION
         assert post.access_level_id == "level_123"
 
     def test_post_with_minimum_donation(self) -> None:
-        post = PostBuilder().title("Donation post").text("Content").minimum_donation(amount=500, currency="RUB").build()
+        post = (
+            PostBuilder()
+            .title("Donation post")
+            .text("Content")
+            .minimum_donation(amount=500, currency="RUB")
+            .build()
+        )
         assert post.access_type == PostAccess.DONATION
         assert post.minimum_donation_amount == 500
         assert post.minimum_donation_currency == "RUB"
@@ -56,7 +68,7 @@ class TestPostBuilder:
         assert post.content[2].type == ContentType.TEXT
 
     def test_scheduled_post(self) -> None:
-        dt = datetime(2026, 4, 1, 12, 0, tzinfo=timezone.utc)
+        dt = datetime(2026, 4, 1, 12, 0, tzinfo=UTC)
         post = PostBuilder().title("Scheduled").text("Later").free().scheduled_at(dt).build()
         assert post.scheduled_at == dt
 

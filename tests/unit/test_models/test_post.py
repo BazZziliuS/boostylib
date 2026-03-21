@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 import pytest
 
@@ -48,7 +48,7 @@ class TestPost:
         post = Post(
             id="123",
             title="Test",
-            created_at=datetime(2026, 1, 1, tzinfo=timezone.utc),
+            created_at=datetime(2026, 1, 1, tzinfo=UTC),
         )
         assert post.id == "123"
         assert post.tags == []
@@ -64,7 +64,7 @@ class TestPost:
                 ContentBlock(type=ContentType.TEXT, content="Paragraph"),
                 ContentBlock(type=ContentType.IMAGE, url="https://img.jpg"),
             ],
-            created_at=datetime(2026, 1, 1, tzinfo=timezone.utc),
+            created_at=datetime(2026, 1, 1, tzinfo=UTC),
             tags=[PostTag(id=1, title="test")],
         )
         assert len(post.content) == 2

@@ -207,7 +207,9 @@ class HTTPTransport:
 
     def _log_response(self, response: httpx.Response) -> None:
         level = logging.DEBUG if not self._settings.debug else logging.INFO
-        logger.log(level, "%d %s (%.0f bytes)", response.status_code, response.url, len(response.content))
+        logger.log(
+            level, "%d %s (%.0f bytes)", response.status_code, response.url, len(response.content)
+        )
 
     async def close(self) -> None:
         """Close the underlying HTTP client if we own it."""

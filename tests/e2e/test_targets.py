@@ -19,7 +19,9 @@ pytestmark = [
 
 
 class TestTargets:
-    async def test_create_read_delete_target(self, client: BoostyClient, blog_username: str) -> None:
+    async def test_create_read_delete_target(
+        self, client: BoostyClient, blog_username: str
+    ) -> None:
         """Quick round-trip: create, read by ID, delete."""
         target = await client.targets.create_target(
             blog_username,

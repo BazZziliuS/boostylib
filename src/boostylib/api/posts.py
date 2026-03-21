@@ -3,7 +3,8 @@
 from __future__ import annotations
 
 import json
-from typing import Any, AsyncIterator
+from collections.abc import AsyncIterator
+from typing import Any
 
 from boostylib.api.base import BaseAPI
 from boostylib.models.pagination import PaginatedResponse
@@ -56,7 +57,9 @@ class PostsAPI(BaseAPI):
         params: dict[str, Any] = {}
         if level_id is not None:
             params["level_id"] = level_id
-        async for post in self._iter_pages(f"/blog/{username}/post/", Post, params=params, limit=limit):
+        async for post in self._iter_pages(
+            f"/blog/{username}/post/", Post, params=params, limit=limit
+        ):
             yield post
 
     async def get_post(self, username: str, post_id: str) -> Post:

@@ -12,15 +12,14 @@ from boostylib.auth import EnvTokenStorage
 
 
 def _has_credentials() -> bool:
-    return bool(
-        os.environ.get("BOOSTY_ACCESS_TOKEN")
-        and os.environ.get("BOOSTY_DEVICE_ID")
-    )
+    return bool(os.environ.get("BOOSTY_ACCESS_TOKEN") and os.environ.get("BOOSTY_DEVICE_ID"))
 
 
 pytestmark = [
     pytest.mark.e2e,
-    pytest.mark.skipif(not _has_credentials(), reason="BOOSTY_ACCESS_TOKEN / BOOSTY_DEVICE_ID not set"),
+    pytest.mark.skipif(
+        not _has_credentials(), reason="BOOSTY_ACCESS_TOKEN / BOOSTY_DEVICE_ID not set"
+    ),
 ]
 
 

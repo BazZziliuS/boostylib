@@ -39,4 +39,5 @@ class TestSmoke:
         assert isinstance(levels, list)
         print(f"\n  Subscription levels ({len(levels)}):")
         for level in levels:
-            print(f"    - {level.name.encode('ascii', 'replace').decode()}: {level.price} {level.currency} (free={level.is_free})")
+            name = level.name.encode("ascii", "replace").decode()
+            print(f"    - {name}: {level.price} {level.currency} (free={level.is_free})")

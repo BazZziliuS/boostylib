@@ -65,7 +65,9 @@ class TestComments:
 
             # Reply to it (reply_id uses intId, not UUID)
             reply = await client.comments.create_comment(
-                blog_username, post.id, "This is a reply!",
+                blog_username,
+                post.id,
+                "This is a reply!",
                 reply_to=str(original.int_id),
             )
             print(f"  Reply: {reply.id} — {reply.content}")
@@ -92,7 +94,8 @@ class TestComments:
 
             # Auto-reply logic (what the event handler would do)
             auto_reply = await client.comments.create_comment(
-                blog_username, post.id,
+                blog_username,
+                post.id,
                 f"Thank you, {user_comment.author.name}! Glad you liked it!",
                 reply_to=str(user_comment.int_id),
             )

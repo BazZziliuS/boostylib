@@ -3,7 +3,8 @@
 from __future__ import annotations
 
 import json
-from typing import Any, AsyncIterator
+from collections.abc import AsyncIterator
+from typing import Any
 
 from boostylib.api.base import BaseAPI
 from boostylib.models.subscriber import Subscriber
@@ -134,7 +135,11 @@ class SubscriptionsAPI(BaseAPI):
         is_thank_msg_enabled: bool = False,
     ) -> SubscriptionLevel:
         """Create a new subscription level."""
-        text_block = {"type": "text", "content": json.dumps([description, "unstyled", []]), "modificator": ""}
+        text_block = {
+            "type": "text",
+            "content": json.dumps([description, "unstyled", []]),
+            "modificator": "",
+        }
         end_block = {"type": "text", "content": "", "modificator": "BLOCK_END"}
 
         form_data = {

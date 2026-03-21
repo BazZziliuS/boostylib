@@ -23,7 +23,7 @@ class TestSubscriptionLifecycle:
 
         # Get the free level ID for migration target
         levels_before = await client.subscriptions.get_levels(blog_username, show_free=True)
-        free_level = next((l for l in levels_before if l.price == 0), None)
+        free_level = next((lvl for lvl in levels_before if lvl.price == 0), None)
         free_level_id = free_level.id if free_level else 0
         print(f"\n  Free level ID for migration: {free_level_id}")
 
@@ -42,7 +42,7 @@ class TestSubscriptionLifecycle:
         try:
             # Verify it appears in the list
             levels_after = await client.subscriptions.get_levels(blog_username)
-            level_ids = [l.id for l in levels_after]
+            level_ids = [lvl.id for lvl in levels_after]
             assert created.id in level_ids, f"Created level {created.id} not in list"
             print(f"  Confirmed in levels list ({len(levels_after)} levels)")
         finally:
@@ -56,6 +56,6 @@ class TestSubscriptionLifecycle:
 
             # Verify deletion
             levels_final = await client.subscriptions.get_levels(blog_username)
-            remaining_ids = [l.id for l in levels_final]
+            remaining_ids = [lvl.id for lvl in levels_final]
             assert created.id not in remaining_ids
             print(f"  Confirmed deleted ({len(levels_final)} levels remaining)")

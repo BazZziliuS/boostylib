@@ -34,7 +34,6 @@ class TestMemoryCache:
         assert cache.size == 0
 
     async def test_ttl_expiry(self) -> None:
-        import time
         cache = MemoryCache()
         await cache.set("expires", b"data", ttl=0)  # ttl=0 means no expiry
         assert await cache.get("expires") == b"data"

@@ -54,9 +54,7 @@ class PostBuilder:
         media_id: str | None = None,
     ) -> Self:
         """Add an image content block."""
-        self._content.append(
-            ContentBlock(type=ContentType.IMAGE, url=url or media_id or file_path)
-        )
+        self._content.append(ContentBlock(type=ContentType.IMAGE, url=url or media_id or file_path))
         return self
 
     def video(self, *, url: str | None = None, media_id: str | None = None) -> Self:

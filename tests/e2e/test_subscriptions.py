@@ -27,15 +27,19 @@ class TestSubscriptions:
         for level in levels:
             assert level.name
             assert level.currency
-            print(f"\n  Level: {level.name.encode('ascii', 'replace').decode()} — {level.price} {level.currency}")
+            name = level.name.encode("ascii", "replace").decode()
+            print(f"\n  Level: {name} -- {level.price} {level.currency}")
 
     async def test_get_levels_without_free(self, client: BoostyClient, blog_username: str) -> None:
         """Fetch only paid levels."""
         levels = await client.subscriptions.get_levels(blog_username, show_free=False)
         for level in levels:
-            print(f"\n  Paid level: {level.name.encode('ascii', 'replace').decode()} — {level.price} {level.currency}")
+            name = level.name.encode("ascii", "replace").decode()
+            print(f"\n  Paid level: {name} -- {level.price} {level.currency}")
 
-    async def test_verify_subscription_nonexistent(self, client: BoostyClient, blog_username: str) -> None:
+    async def test_verify_subscription_nonexistent(
+        self, client: BoostyClient, blog_username: str
+    ) -> None:
         """Verify that a fake user is not subscribed."""
         status = await client.subscriptions.verify_subscription(blog_username, "99999999999")
         assert status.is_subscribed is False

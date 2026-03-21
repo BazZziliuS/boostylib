@@ -4,7 +4,8 @@ from __future__ import annotations
 
 import logging
 from collections import defaultdict
-from typing import Any, Callable, Coroutine
+from collections.abc import Callable, Coroutine
+from typing import Any
 
 from boostylib.enums import EventType
 from boostylib.events.models import Event
@@ -29,9 +30,11 @@ class EventDispatcher:
             async def handle_donation(event: DonationEvent):
                 print(event.amount)
         """
+
         def decorator(func: EventHandler) -> EventHandler:
             self._handlers[event_type].append(func)
             return func
+
         return decorator
 
     def register(self, event_type: EventType, handler: EventHandler) -> None:

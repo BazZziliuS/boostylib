@@ -2,12 +2,12 @@
 
 from __future__ import annotations
 
+import httpx
 import pytest
 import respx
-import httpx
 
-from boostylib.sync import SyncBoostyClient
 from boostylib import BoostySettings
+from boostylib.sync import SyncBoostyClient
 
 pytestmark = pytest.mark.unit
 
@@ -17,11 +17,14 @@ class TestSyncClient:
     def test_sync_get_user(self) -> None:
         """Test synchronous API call through SyncBoostyClient."""
         respx.get("https://api.boosty.to/v1/user/current").mock(
-            return_value=httpx.Response(200, json={
-                "id": 123,
-                "name": "TestUser",
-                "hasAvatar": False,
-            })
+            return_value=httpx.Response(
+                200,
+                json={
+                    "id": 123,
+                    "name": "TestUser",
+                    "hasAvatar": False,
+                },
+            )
         )
 
         settings = BoostySettings(

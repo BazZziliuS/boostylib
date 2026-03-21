@@ -19,7 +19,9 @@ pytestmark = [
 
 
 class TestTargetLifecycle:
-    async def test_create_money_target_and_delete(self, client: BoostyClient, blog_username: str) -> None:
+    async def test_create_money_target_and_delete(
+        self, client: BoostyClient, blog_username: str
+    ) -> None:
         """Create a money target, read it back, then delete."""
         created = await client.targets.create_target(
             blog_username,
@@ -43,7 +45,9 @@ class TestTargetLifecycle:
             await client.targets.delete_target(created.id)
             print(f"  Deleted target: {created.id}")
 
-    async def test_create_subscribers_target_and_delete(self, client: BoostyClient, blog_username: str) -> None:
+    async def test_create_subscribers_target_and_delete(
+        self, client: BoostyClient, blog_username: str
+    ) -> None:
         """Create a subscribers target, read it back, then delete."""
         created = await client.targets.create_target(
             blog_username,

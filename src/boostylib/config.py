@@ -2,8 +2,6 @@
 
 from __future__ import annotations
 
-from typing import ClassVar, Tuple
-
 from pydantic_settings import BaseSettings, PydanticBaseSettingsSource, SettingsConfigDict
 
 try:
@@ -42,9 +40,7 @@ class BoostySettings(BaseSettings):
             env_settings,
         ]
         if _HAS_TOML:
-            sources.append(
-                TomlConfigSettingsSource(settings_cls, toml_file="boosty.toml")
-            )
+            sources.append(TomlConfigSettingsSource(settings_cls, toml_file="boosty.toml"))
         sources.append(file_secret_settings)
         return tuple(sources)
 

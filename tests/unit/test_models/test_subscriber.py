@@ -5,7 +5,6 @@ from __future__ import annotations
 import pytest
 
 from boostylib.models.subscriber import Subscriber
-from boostylib.models.subscription import SubscriptionLevel
 
 pytestmark = pytest.mark.unit
 
@@ -38,8 +37,12 @@ class TestSubscriber:
 
     def test_inactive_subscriber(self) -> None:
         sub = Subscriber(
-            id=1, name="Gone", email="gone@mail.com",
-            status="inactive", subscribed=False, price=0,
+            id=1,
+            name="Gone",
+            email="gone@mail.com",
+            status="inactive",
+            subscribed=False,
+            price=0,
         )
         assert sub.is_active is False
         assert sub.is_paid is False

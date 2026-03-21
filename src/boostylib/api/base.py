@@ -2,7 +2,8 @@
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, AsyncIterator, TypeVar
+from collections.abc import AsyncIterator
+from typing import TYPE_CHECKING, Any, TypeVar
 
 from boostylib.models.pagination import PaginatedResponse
 

@@ -7,7 +7,6 @@ import os
 import pytest
 
 from boostylib import BoostyClient
-from boostylib.builders import PostBuilder
 
 pytestmark = [
     pytest.mark.e2e,
@@ -30,7 +29,7 @@ class TestPosts:
     async def test_iter_posts(self, client: BoostyClient, blog_username: str) -> None:
         """Iterate over posts with auto-pagination (limit to 10)."""
         count = 0
-        async for post in client.posts.iter_posts(blog_username, limit=5):
+        async for _post in client.posts.iter_posts(blog_username, limit=5):
             count += 1
             if count >= 10:
                 break

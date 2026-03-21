@@ -3,7 +3,8 @@
 from __future__ import annotations
 
 import json
-from typing import Any, AsyncIterator
+from collections.abc import AsyncIterator
+from typing import Any
 
 from boostylib.api.base import BaseAPI
 from boostylib.enums import CommentOrder
@@ -52,7 +53,11 @@ class CommentsAPI(BaseAPI):
             text: Comment text.
             reply_to: Comment ID to reply to (optional).
         """
-        text_block = {"type": "text", "content": json.dumps([text, "unstyled", []]), "modificator": ""}
+        text_block = {
+            "type": "text",
+            "content": json.dumps([text, "unstyled", []]),
+            "modificator": "",
+        }
         end_block = {"type": "text", "content": "", "modificator": "BLOCK_END"}
 
         form_data: dict[str, str] = {
@@ -102,7 +107,11 @@ class CommentsAPI(BaseAPI):
         offset: str | None = None
         while True:
             page = await self.get_comments(
-                username, post_id, limit=limit, offset=offset, order=order,
+                username,
+                post_id,
+                limit=limit,
+                offset=offset,
+                order=order,
             )
             for comment in page.data:
                 yield comment
@@ -133,7 +142,7 @@ class CommentsAPI(BaseAPI):
                     parsed = json.loads(raw_content)
                     if isinstance(parsed, list) and parsed:
                         text_parts.append(str(parsed[0]))
-                except (json.JSONDecodeError, IndexError):
+                except json.JSONDecodeError, IndexError:
                     if raw_content:
                         text_parts.append(raw_content)
 

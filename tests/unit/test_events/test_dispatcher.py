@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 
 import pytest
 
@@ -18,7 +18,7 @@ def _make_donation_event() -> DonationEvent:
     return DonationEvent(
         type=EventType.NEW_DONATION,
         blog_username="testblog",
-        timestamp=datetime(2026, 1, 1, tzinfo=timezone.utc),
+        timestamp=datetime(2026, 1, 1, tzinfo=UTC),
         user=User(id=1, name="donor"),
         amount=500,
         currency="RUB",

@@ -54,7 +54,7 @@ class TestPostLifecycle:
             page = await client.posts.list_posts(blog_username, limit=5)
             post_ids = [p.id for p in page.data]
             assert post_id in post_ids, f"Created post {post_id} not in list: {post_ids}"
-            print(f"  Confirmed in post list")
+            print("  Confirmed in post list")
         finally:
             # Delete (always clean up)
             await client.posts.delete_post(blog_username, post_id)
@@ -73,7 +73,9 @@ class TestPostLifecycle:
 
         # Save as draft
         draft_data = await client.posts.save_draft(blog_username, post_req)
-        print(f"\n  Draft saved: {draft_data.get('data', {}).get('postDraft', {}).get('title', '?')}")
+        print(
+            f"\n  Draft saved: {draft_data.get('data', {}).get('postDraft', {}).get('title', '?')}"
+        )
 
         # Publish
         published = await client.posts.publish_draft(blog_username)

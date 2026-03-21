@@ -2,7 +2,12 @@
 
 from boostylib.auth.manager import AuthManager
 from boostylib.auth.models import AuthCredentials, TokenPair
-from boostylib.auth.storage import EnvTokenStorage, FileTokenStorage, MemoryTokenStorage, TokenStorage
+from boostylib.auth.storage import (
+    EnvTokenStorage,
+    FileTokenStorage,
+    MemoryTokenStorage,
+    TokenStorage,
+)
 
 __all__ = [
     "AuthCredentials",
