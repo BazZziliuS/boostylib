@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.1.0] — 2026-03-21
+
+### Added
+
+- `DonationsAPI.get_donation_messages()` — donation messages with sender, amount, email, and text from `/dialog/` API
+- `DonationsAPI.iter_donation_messages()` — async iterator over all donation messages
+- `DonationsAPI.get_dialog_donations(dialog_id)` — all donations from a single user
+- `DonationMessage` model with `amount`, `user`, `email`, `message`, `created_at`, `dialog_id`
+
 ## [1.0.1] — 2026-03-21
 
 ### Fixed
