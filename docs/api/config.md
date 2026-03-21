@@ -1,0 +1,3 @@
+# Configuration
+
+::: boostylib.config.BoostySettings

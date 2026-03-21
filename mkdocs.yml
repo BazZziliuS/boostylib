@@ -1,0 +1,78 @@
+site_name: boostylib
+site_description: Async Python library for Boosty.to API
+repo_url: https://github.com/BazZziliuS/boostylib
+repo_name: BazZziliuS/boostylib
+
+theme:
+  name: material
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: deep-orange
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: deep-orange
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - content.code.copy
+    - content.tabs.link
+    - navigation.sections
+    - navigation.expand
+    - search.highlight
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            show_source: true
+            show_root_heading: true
+            members_order: source
+            docstring_style: google
+
+nav:
+  - Home: index.md
+  - Getting Started:
+      - Installation: getting-started/installation.md
+      - Authentication: getting-started/authentication.md
+      - Quick Start: getting-started/quickstart.md
+  - User Guide:
+      - Configuration: guide/configuration.md
+      - Working with Posts: guide/posts.md
+      - Subscriber Data & Emails: guide/subscribers.md
+      - Subscription Verification: guide/subscriptions.md
+      - Donation Tracking: guide/donations.md
+      - Event System: guide/events.md
+      - Media Uploads: guide/media.md
+      - Synchronous Client: guide/sync.md
+      - Caching: guide/caching.md
+      - Pagination: guide/pagination.md
+      - Middleware: guide/middleware.md
+      - Error Handling: guide/errors.md
+  - API Reference:
+      - Client: api/client.md
+      - Models: api/models.md
+      - Builders: api/builders.md
+      - Events: api/events.md
+      - Exceptions: api/exceptions.md
+      - Config: api/config.md
+  - Examples:
+      - Telegram Bot: examples/telegram-bot.md
+      - Discord Bot: examples/discord-bot.md
+      - Auto-Responder: examples/auto-responder.md
+  - Changelog: changelog.md
+
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - admonition
+  - pymdownx.details
