@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.0.1] — 2026-03-21
+
+### Fixed
+
+- `DonationsAPI` — replaced fake `/donations/` endpoint with real data sources (post `donators` + subscriber `payments`)
+- Removed obsolete `Donation` model
+- Fixed YAML `on` parsed as boolean in mkdocs docs
+- Removed unused CLI module
+
 ## [1.0.0] — 2026-03-21
 
 ### Added
