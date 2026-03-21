@@ -1,46 +1,46 @@
 # Donation Tracking
 
-## List Donations
+Boosty does not have a dedicated donations endpoint. Donation data is available through:
+
+- **Post objects**: `donations` (total amount) and `donators` (list of donors)
+- **Subscriber objects**: `payments` (lifetime total of all payments)
+
+## Get Donations for a Post
 
 ```python
-page = await client.donations.get_donations("my_blog", limit=20)
-for donation in page.data:
-    print(f"{donation.user.name}: {donation.amount} {donation.currency}")
-    if donation.message:
-        print(f"  Message: {donation.message}")
+info = await client.donations.get_post_donations("my_blog", "post_id")
+print(f"Total: {info.total_amount}")
+for donator in info.donators:
+    print(f"  {donator}")
 ```
 
-### Filter by Date
+## Find All Posts with Donations
 
 ```python
-# Unix timestamps
-page = await client.donations.get_donations(
-    "my_blog",
-    from_ts=1700000000,
-    to_ts=1710000000,
+async for info in client.donations.iter_posts_with_donations(
+    "my_blog", posts_api=client.posts
+):
+    print(f"{info.post_title}: {info.total_amount} ({len(info.donators)} donators)")
+```
+
+## Get Paid Subscribers (Lifetime Payments)
+
+```python
+paid = await client.donations.get_paid_subscribers(
+    "my_blog", subscriptions_api=client.subscriptions
 )
+for p in paid:
+    print(f"{p.name} ({p.email}): {p.total_payments} RUB, active={p.is_active}")
 ```
 
-### Async Iterator
+## Subscriber Payments
+
+The `Subscriber` model includes a `payments` field with the total lifetime payments:
 
 ```python
-async for donation in client.donations.iter_donations("my_blog"):
-    print(f"{donation.user.name}: {donation.amount}")
+async for sub in client.subscriptions.iter_subscribers("my_blog"):
+    if sub.payments > 0:
+        print(f"{sub.name}: {sub.email} — {sub.payments} RUB")
 ```
 
-## Auto-Respond to Donations
-
-See [Event System](events.md) for the full decorator-based approach.
-
-```python
-from boostylib import EventType
-
-@client.on(EventType.NEW_DONATION)
-async def thank_donor(event):
-    if event.amount >= 500:
-        await client.comments.create_comment(
-            event.blog_username,
-            event.post_id,
-            f"Thank you for {event.amount} {event.currency}, {event.user.name}!",
-        )
-```
+See [Subscriber Data](subscribers.md) for the full model.

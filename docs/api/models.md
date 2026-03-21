@@ -36,10 +36,6 @@
 
 ::: boostylib.models.subscription.UserSubscription
 
-## Donation
-
-::: boostylib.models.donation.Donation
-
 ## Comment
 
 ::: boostylib.models.comment.Comment

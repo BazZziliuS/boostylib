@@ -20,7 +20,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
   - `PostsAPI` — two-step draft→publish flow, list, get, update, delete
   - `CommentsAPI` — read, create, delete, reply (with `int_id` for threading)
   - `SubscriptionsAPI` — levels CRUD, subscriber list with **email and payments** (`Subscriber` model), verification
-  - `DonationsAPI` — donation tracking with date filtering
+  - `DonationsAPI` — donation data from posts (`donators`) and subscriber payments
   - `TargetsAPI` — money and subscriber goals (create, read, delete)
   - `ShowcaseAPI` — showcase items
   - `MediaAPI` — file, image, video, audio uploads
@@ -28,7 +28,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/).
 - `PostBuilder` — fluent API for post creation with access control
 - `Subscriber` model — typed model with `email`, `payments`, `status`, `on_time`, `off_time`, `is_active`, `is_paid`
 - Event system: `EventPoller` with **real detectors** (new subscribers, cancellations, new comments), `EventDispatcher` with `@client.on()` decorator
-- Models: `User`, `Blog`, `Post`, `PostTag`, `Comment`, `Donation`, `SubscriptionLevel`, `SubscriptionStatus`, `Subscriber`, `MediaFile`, `Target`, `PaginatedResponse[T]`
+- Models: `User`, `Blog`, `Post`, `PostTag`, `Comment`, `SubscriptionLevel`, `SubscriptionStatus`, `Subscriber`, `MediaFile`, `Target`, `PaginatedResponse[T]`
 - Exception hierarchy: `BoostyAuthError`, `BoostyForbiddenError`, `BoostyNotFoundError`, `BoostyRateLimitError`, `BoostyServerError`, `BoostyNetworkError`
 - Pagination: manual and async iterator support
 - PEP 561 `py.typed` marker

@@ -2,7 +2,6 @@
 
 from boostylib.models.blog import Blog
 from boostylib.models.comment import Comment
-from boostylib.models.donation import Donation
 from boostylib.models.media import MediaFile
 from boostylib.models.pagination import PaginatedResponse
 from boostylib.models.post import AccessLevel, ContentBlock, Post, PostCreateRequest
@@ -16,7 +15,6 @@ __all__ = [
     "Blog",
     "Comment",
     "ContentBlock",
-    "Donation",
     "MediaFile",
     "PaginatedResponse",
     "Post",

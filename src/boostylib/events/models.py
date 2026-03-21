@@ -33,7 +33,7 @@ class SubscriptionEvent(Event):
     """Fired on subscription changes."""
 
     user: User
-    level: SubscriptionLevel
+    level: SubscriptionLevel | dict
     welcome_post_id: str | None = None
 
 

@@ -353,7 +353,7 @@ client = BoostyClient(access_token="...", middleware=[LoggingMiddleware()])
 | `client.posts` | CRUD posts (draft → publish flow), list with filters |
 | `client.comments` | Read, create, delete, reply to comments |
 | `client.subscriptions` | Levels CRUD, verification, subscribers with email/payments |
-| `client.donations` | Donation tracking with date filtering |
+| `client.donations` | Donation data from posts and subscriber payments |
 | `client.targets` | CRUD goals (money and subscriber targets) |
 | `client.showcase` | Showcase items |
 | `client.media` | Upload images, files, video, audio |
