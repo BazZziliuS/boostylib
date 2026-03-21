@@ -38,4 +38,3 @@ print(boostylib.__version__)
 |---|---|---|
 | `dev` | `uv sync --extra dev` | pytest, ruff, mypy, respx |
 | `docs` | `uv sync --extra docs` | mkdocs-material, mkdocstrings |
-| `cli` | `pip install boostylib[cli]` | click, rich — enables `boosty` CLI command |

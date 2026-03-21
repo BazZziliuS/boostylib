@@ -42,10 +42,6 @@ docs = [
     "mkdocs-material>=9.5",
     "mkdocstrings[python]>=0.25",
 ]
-cli = [
-    "click>=8.1",
-    "rich>=13.0",
-]
 
 [project.urls]
 Repository = "https://github.com/BazZziliuS/boostylib"
