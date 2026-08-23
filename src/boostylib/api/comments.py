@@ -142,7 +142,7 @@ class CommentsAPI(BaseAPI):
                     parsed = json.loads(raw_content)
                     if isinstance(parsed, list) and parsed:
                         text_parts.append(str(parsed[0]))
-                except json.JSONDecodeError, IndexError:
+                except (json.JSONDecodeError, IndexError):
                     if raw_content:
                         text_parts.append(raw_content)
 
