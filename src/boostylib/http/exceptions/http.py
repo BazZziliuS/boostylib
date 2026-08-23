@@ -1,14 +1,8 @@
-"""Exception hierarchy for Boosty API errors."""
+"""HTTP status code specific exceptions."""
 
 from __future__ import annotations
 
-
-class BoostyError(Exception):
-    """Base exception for all boostylib errors."""
-
-    def __init__(self, message: str, *, status_code: int | None = None) -> None:
-        super().__init__(message)
-        self.status_code = status_code
+from boostylib.http.exceptions.base import BoostyError
 
 
 class BoostyAuthError(BoostyError):
@@ -50,11 +44,3 @@ class BoostyServerError(BoostyError):
 
     def __init__(self, message: str = "Server error", *, status_code: int = 500) -> None:
         super().__init__(message, status_code=status_code)
-
-
-class BoostyNetworkError(BoostyError):
-    """Network-level errors: timeouts, DNS failures, connection errors."""
-
-    def __init__(self, message: str = "Network error", *, cause: Exception | None = None) -> None:
-        super().__init__(message, status_code=None)
-        self.__cause__ = cause
