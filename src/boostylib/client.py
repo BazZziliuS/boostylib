@@ -125,6 +125,12 @@ class BoostyClient:
             @client.on(EventType.NEW_DONATION)
             async def handle(event):
                 print(event.amount)
+
+        Args:
+            event_type: EventType to listen for.
+
+        Returns:
+            Decorator registering the async event handler.
         """
         return self._dispatcher.on(event_type)
 

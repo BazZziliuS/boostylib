@@ -171,7 +171,14 @@ class CacheManager:
         self.ttl_default = ttl_default
 
     async def get_json(self, key: str) -> Any | None:
-        """Get a cached JSON value."""
+        """Get a cached JSON value.
+
+        Args:
+            key: Cache key.
+
+        Returns:
+            Deserialized JSON data or None if missing/disabled.
+        """
         if not self.enabled:
             return None
         data = await self._backend.get(key)
@@ -180,17 +187,31 @@ class CacheManager:
         return json.loads(data)
 
     async def set_json(self, key: str, value: Any, *, ttl: int | None = None) -> None:
-        """Cache a JSON-serializable value."""
+        """Cache a JSON-serializable value.
+
+        Args:
+            key: Cache key.
+            value: JSON-serializable Python data structure.
+            ttl: Optional TTL in seconds (falls back to default).
+        """
         if not self.enabled:
             return
         await self._backend.set(key, json.dumps(value).encode(), ttl=ttl or self.ttl_default)
 
     async def delete(self, key: str) -> None:
-        """Delete a cached entry."""
+        """Delete a cached entry.
+
+        Args:
+            key: Cache key to delete.
+        """
         await self._backend.delete(key)
 
     async def invalidate_pattern(self, prefix: str) -> None:
-        """Invalidate all keys starting with prefix (MemoryCache only)."""
+        """Invalidate all keys starting with prefix (MemoryCache only).
+
+        Args:
+            prefix: Key prefix to match and delete.
+        """
         if isinstance(self._backend, MemoryCache):
             async with self._backend._lock:
                 keys_to_delete = [k for k in self._backend._store if k.startswith(prefix)]
