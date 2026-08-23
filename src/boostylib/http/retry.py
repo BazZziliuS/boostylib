@@ -39,8 +39,8 @@ class RetryPolicy:
     def get_delay(self, attempt: int, retry_after: float | None = None) -> float:
         """Calculate delay before next retry attempt."""
         if retry_after is not None:
-            return retry_after
-        return self.backoff_factor * (2**attempt)
+            return float(retry_after)
+        return float(self.backoff_factor * (2**attempt))
 
     async def wait(self, attempt: int, status_code: int, retry_after: float | None = None) -> None:
         """Wait before retry with logging."""

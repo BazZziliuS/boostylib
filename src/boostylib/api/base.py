@@ -5,12 +5,14 @@ from __future__ import annotations
 from collections.abc import AsyncIterator
 from typing import TYPE_CHECKING, Any, TypeVar
 
+from pydantic import BaseModel
+
 from boostylib.models.pagination import PaginatedResponse
 
 if TYPE_CHECKING:
     from boostylib.http.transport import HTTPTransport
 
-T = TypeVar("T")
+T = TypeVar("T", bound=BaseModel)
 
 
 class BaseAPI:
@@ -63,7 +65,7 @@ class BaseAPI:
         """Parse a raw paginated API response."""
         items_raw = data.get("data", [])
         extra = data.get("extra", {})
-        items = [model_cls.model_validate(item) for item in items_raw]  # type: ignore[union-attr]
+        items = [model_cls.model_validate(item) for item in items_raw]
         return PaginatedResponse(
             data=items,
             cursor=extra.get("offset"),
