@@ -20,7 +20,15 @@ class SubscriptionsAPI(BaseAPI):
         *,
         show_free: bool = True,
     ) -> list[SubscriptionLevel]:
-        """Get subscription levels for a blog."""
+        """Get subscription levels for a blog.
+
+        Args:
+            username: Blog username.
+            show_free: Whether to include free tier.
+
+        Returns:
+            List of subscription levels.
+        """
         data = await self._get(
             f"/blog/{username}/subscription_level/",
             params={"show_free_level": show_free},
@@ -38,6 +46,13 @@ class SubscriptionsAPI(BaseAPI):
         """Verify a user's subscription status to a blog.
 
         Iterates through the subscriber list to find the user.
+
+        Args:
+            username: Blog username.
+            user_id: Target user ID to verify.
+
+        Returns:
+            SubscriptionStatus model instance with verification details.
         """
         offset: int = 0
         limit = 100
@@ -77,6 +92,12 @@ class SubscriptionsAPI(BaseAPI):
     ) -> list[Subscriber]:
         """Get subscribers list with full data (email, payments, status).
 
+        Args:
+            username: Blog username.
+            level_id: Optional subscription level filter.
+            limit: Page size limit.
+            offset: Offset pagination index.
+
         Returns:
             List of Subscriber models with email, payments, and level info.
         """
@@ -93,7 +114,16 @@ class SubscriptionsAPI(BaseAPI):
         limit: int = 20,
         offset: int = 0,
     ) -> dict[str, Any]:
-        """Get raw subscribers response (includes total, offset)."""
+        """Get raw subscribers response (includes total, offset).
+
+        Args:
+            username: Blog username.
+            limit: Page size limit.
+            offset: Offset pagination index.
+
+        Returns:
+            Raw dictionary response with total count and subscriber list.
+        """
         return await self._get(
             f"/blog/{username}/subscribers",
             params={"limit": limit, "offset": offset},
@@ -106,7 +136,16 @@ class SubscriptionsAPI(BaseAPI):
         level_id: int | None = None,
         limit: int = 100,
     ) -> AsyncIterator[Subscriber]:
-        """Async iterate over all subscribers."""
+        """Async iterate over all subscribers.
+
+        Args:
+            username: Blog username.
+            level_id: Optional filter for level ID.
+            limit: Batch size per request.
+
+        Yields:
+            Subscriber models lazily retrieved across pages.
+        """
         offset = 0
         while True:
             params: dict[str, Any] = {"limit": limit, "offset": offset}
@@ -134,7 +173,19 @@ class SubscriptionsAPI(BaseAPI):
         subscribers_limit: int = 0,
         is_thank_msg_enabled: bool = False,
     ) -> SubscriptionLevel:
-        """Create a new subscription level."""
+        """Create a new subscription level.
+
+        Args:
+            username: Blog username.
+            name: Subscription level title.
+            price: Monthly price in currency.
+            description: Level description text.
+            subscribers_limit: Max allowed subscribers (0 for unlimited).
+            is_thank_msg_enabled: Whether to send thank-you message on purchase.
+
+        Returns:
+            Newly created SubscriptionLevel instance.
+        """
         text_block = {
             "type": "text",
             "content": json.dumps([description, "unstyled", []]),
@@ -169,7 +220,14 @@ class SubscriptionsAPI(BaseAPI):
         posts_migration_level_id: int = 0,
         subscribers_migration_level_id: int | None = None,
     ) -> None:
-        """Delete a subscription level."""
+        """Delete a subscription level.
+
+        Args:
+            username: Blog username.
+            level_id: ID of level to remove.
+            posts_migration_level_id: Target level ID to migrate posts to.
+            subscribers_migration_level_id: Target level ID to migrate subscribers to.
+        """
         form_data: dict[str, str] = {
             "posts_migration_level_id": str(posts_migration_level_id),
         }

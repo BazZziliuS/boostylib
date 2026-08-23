@@ -153,7 +153,12 @@ class PostsAPI(BaseAPI):
         return Post.model_validate(data.get("data", {}).get("post", data))
 
     async def delete_post(self, username: str, post_id: str) -> None:
-        """Delete a post."""
+        """Delete a post.
+
+        Args:
+            username: Blog username.
+            post_id: Identifier of post to delete.
+        """
         await self._transport.request("DELETE", f"/blog/{username}/post/{post_id}")
 
     def _build_draft_form(self, post: PostCreateRequest) -> dict[str, str]:
