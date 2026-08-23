@@ -23,9 +23,25 @@ _DEFAULT_AUTH_PATH = Path.home() / ".boosty" / "auth.json"
 class TokenStorage(Protocol):
     """Protocol for token persistence."""
 
-    async def load(self) -> TokenPair | None: ...
-    async def save(self, tokens: TokenPair) -> None: ...
-    async def clear(self) -> None: ...
+    async def load(self) -> TokenPair | None:
+        """Load stored tokens.
+
+        Returns:
+            TokenPair if found, None otherwise.
+        """
+        ...
+
+    async def save(self, tokens: TokenPair) -> None:
+        """Save tokens to storage.
+
+        Args:
+            tokens: Token pair to persist.
+        """
+        ...
+
+    async def clear(self) -> None:
+        """Clear stored tokens."""
+        ...
 
 
 class MemoryTokenStorage:
@@ -35,12 +51,23 @@ class MemoryTokenStorage:
         self._tokens: TokenPair | None = None
 
     async def load(self) -> TokenPair | None:
+        """Load stored tokens from memory.
+
+        Returns:
+            TokenPair if set, None otherwise.
+        """
         return self._tokens
 
     async def save(self, tokens: TokenPair) -> None:
+        """Save tokens to memory.
+
+        Args:
+            tokens: Token pair to store.
+        """
         self._tokens = tokens
 
     async def clear(self) -> None:
+        """Clear stored tokens from memory."""
         self._tokens = None
 
 
@@ -55,6 +82,11 @@ class FileTokenStorage:
         self._path = path or _DEFAULT_AUTH_PATH
 
     async def load(self) -> TokenPair | None:
+        """Load tokens from JSON file.
+
+        Returns:
+            TokenPair if file exists and valid, None otherwise.
+        """
         if not self._path.exists():
             return None
         try:
@@ -70,6 +102,11 @@ class FileTokenStorage:
             return None
 
     async def save(self, tokens: TokenPair) -> None:
+        """Save tokens to JSON file.
+
+        Args:
+            tokens: Token pair to persist.
+        """
         self._path.parent.mkdir(parents=True, exist_ok=True)
         data = {
             "access_token": tokens.access_token.get_secret_value(),
@@ -81,6 +118,7 @@ class FileTokenStorage:
         self._set_secure_permissions()
 
     async def clear(self) -> None:
+        """Delete tokens file from filesystem."""
         if self._path.exists():
             self._path.unlink()
 
@@ -105,6 +143,11 @@ class EnvTokenStorage:
     """
 
     async def load(self) -> TokenPair | None:
+        """Load tokens from environment variables.
+
+        Returns:
+            TokenPair if all required variables exist, None otherwise.
+        """
         access_token = os.environ.get("BOOSTY_ACCESS_TOKEN")
         refresh_token = os.environ.get("BOOSTY_REFRESH_TOKEN")
         device_id = os.environ.get("BOOSTY_DEVICE_ID")
@@ -118,7 +161,13 @@ class EnvTokenStorage:
         )
 
     async def save(self, tokens: TokenPair) -> None:
+        """Save tokens (unsupported in read-only environment storage).
+
+        Args:
+            tokens: Token pair (ignored).
+        """
         logger.warning("EnvTokenStorage is read-only, cannot save tokens")
 
     async def clear(self) -> None:
+        """Clear tokens (unsupported in read-only environment storage)."""
         logger.warning("EnvTokenStorage is read-only, cannot clear tokens")

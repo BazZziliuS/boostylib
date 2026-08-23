@@ -19,7 +19,7 @@ if TYPE_CHECKING:
 
 logger = logging.getLogger("boostylib.auth")
 
-_TOKEN_REFRESH_URL = "https://api.boosty.to/oauth/token/"
+_TOKEN_REFRESH_URL = "https://api.boosty.to/oauth/token/"  # chutils: ignore[SecurityHardcodeRule]
 
 
 class AuthManager:

@@ -12,25 +12,74 @@ from typing import Any, Protocol, runtime_checkable
 class CacheBackend(Protocol):
     """Protocol for cache storage backends."""
 
-    async def get(self, key: str) -> bytes | None: ...
-    async def set(self, key: str, value: bytes, *, ttl: int | None = None) -> None: ...
-    async def delete(self, key: str) -> None: ...
-    async def clear(self) -> None: ...
+    async def get(self, key: str) -> bytes | None:
+        """Get cached value by key.
+
+        Args:
+            key: Cache key.
+
+        Returns:
+            Cached bytes or None if missing/expired.
+        """
+        ...
+
+    async def set(self, key: str, value: bytes, *, ttl: int | None = None) -> None:
+        """Store value in cache.
+
+        Args:
+            key: Cache key.
+            value: Value bytes to cache.
+            ttl: Time-to-live in seconds (optional).
+        """
+        ...
+
+    async def delete(self, key: str) -> None:
+        """Delete key from cache.
+
+        Args:
+            key: Cache key.
+        """
+        ...
+
+    async def clear(self) -> None:
+        """Clear all keys from cache."""
+        ...
 
 
 class NullCache:
     """No-op cache — pass-through, nothing is stored."""
 
     async def get(self, key: str) -> bytes | None:
+        """Get cached value.
+
+        Args:
+            key: Cache key.
+
+        Returns:
+            Always None.
+        """
         return None
 
     async def set(self, key: str, value: bytes, *, ttl: int | None = None) -> None:
+        """Store value in cache (no-op).
+
+        Args:
+            key: Cache key.
+            value: Value bytes.
+            ttl: Optional TTL.
+        """
         pass
 
     async def delete(self, key: str) -> None:
+        """Delete key from cache (no-op).
+
+        Args:
+            key: Cache key.
+        """
         pass
 
     async def clear(self) -> None:
+        """Clear all keys from cache (no-op)."""
         pass
 
 
@@ -42,10 +91,19 @@ class MemoryCache:
     """
 
     def __init__(self) -> None:
+        """Initialize in-memory cache."""
         self._store: dict[str, tuple[bytes, float]] = {}  # key -> (value, expires_at)
         self._lock = asyncio.Lock()
 
     async def get(self, key: str) -> bytes | None:
+        """Get cached value by key.
+
+        Args:
+            key: Cache key.
+
+        Returns:
+            Cached bytes or None if missing or expired.
+        """
         async with self._lock:
             entry = self._store.get(key)
             if entry is None:
@@ -57,20 +115,34 @@ class MemoryCache:
             return value
 
     async def set(self, key: str, value: bytes, *, ttl: int | None = None) -> None:
+        """Store value in memory cache with optional TTL.
+
+        Args:
+            key: Cache key.
+            value: Bytes value to store.
+            ttl: Expiry time in seconds.
+        """
         async with self._lock:
             expires_at = (time.monotonic() + ttl) if ttl and ttl > 0 else 0.0
             self._store[key] = (value, expires_at)
 
     async def delete(self, key: str) -> None:
+        """Delete key from cache.
+
+        Args:
+            key: Cache key to delete.
+        """
         async with self._lock:
             self._store.pop(key, None)
 
     async def clear(self) -> None:
+        """Clear all entries from cache."""
         async with self._lock:
             self._store.clear()
 
     @property
     def size(self) -> int:
+        """Current number of items in cache."""
         return len(self._store)
 
 

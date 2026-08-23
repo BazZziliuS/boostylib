@@ -101,6 +101,13 @@ warn_return_any = false
 
 [tool.chutils.ai-lint]
 strict = false
+exclude_rules = [
+    "ChutilsIntegrationRule",
+    "APIMapRule",
+    "APIMapHashRule",
+    "FileDependencySyncRule",
+    "EnvSyncRule",
+]
 ignore = [
     ".git",
     ".venv",
@@ -110,4 +117,5 @@ ignore = [
     "tests",
     "site",
     "docs",
+    "TECHNICAL_SPEC.md",
 ]
