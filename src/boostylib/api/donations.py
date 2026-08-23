@@ -197,7 +197,15 @@ class DonationsAPI(BaseAPI):
         username: str,
         post_id: str,
     ) -> PostDonationInfo:
-        """Get donation info for a specific post."""
+        """Get donation info for a specific post.
+
+        Args:
+            username: Blog username.
+            post_id: Identifier of target post.
+
+        Returns:
+            PostDonationInfo model containing total donations and donator list.
+        """
         data = await self._get(f"/blog/{username}/post/{post_id}")
         return PostDonationInfo(
             post_id=data.get("id", post_id),
@@ -212,7 +220,15 @@ class DonationsAPI(BaseAPI):
         *,
         subscriptions_api: SubscriptionsAPI,
     ) -> list[PaymentInfo]:
-        """Get all subscribers who have made payments."""
+        """Get all subscribers who have made payments.
+
+        Args:
+            username: Blog username.
+            subscriptions_api: SubscriptionsAPI instance to query subscribers.
+
+        Returns:
+            List of PaymentInfo objects for paying subscribers.
+        """
         result: list[PaymentInfo] = []
         async for sub in subscriptions_api.iter_subscribers(username):
             if sub.payments > 0:

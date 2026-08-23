@@ -18,7 +18,15 @@ class MediaAPI(BaseAPI):
         *,
         content_type: str = "image/png",
     ) -> MediaFile:
-        """Upload an image file."""
+        """Upload an image file.
+
+        Args:
+            file: Path to image file or open binary stream.
+            content_type: MIME type of image (default: image/png).
+
+        Returns:
+            Uploaded MediaFile model instance.
+        """
         return await self._upload(file, content_type=content_type)
 
     async def upload_file(
@@ -27,15 +35,37 @@ class MediaAPI(BaseAPI):
         *,
         filename: str | None = None,
     ) -> MediaFile:
-        """Upload a generic file (archive, document, etc.)."""
+        """Upload a generic file (archive, document, etc.).
+
+        Args:
+            file: Path to file or binary stream.
+            filename: Optional filename override.
+
+        Returns:
+            Uploaded MediaFile model instance.
+        """
         return await self._upload(file, filename=filename)
 
     async def upload_video(self, file: Path | IO[bytes]) -> MediaFile:
-        """Upload a video file."""
+        """Upload a video file.
+
+        Args:
+            file: Path to video file or binary stream.
+
+        Returns:
+            Uploaded MediaFile model instance.
+        """
         return await self._upload(file, content_type="video/mp4")
 
     async def upload_audio(self, file: Path | IO[bytes]) -> MediaFile:
-        """Upload an audio file."""
+        """Upload an audio file.
+
+        Args:
+            file: Path to audio file or binary stream.
+
+        Returns:
+            Uploaded MediaFile model instance.
+        """
         return await self._upload(file, content_type="audio/mpeg")
 
     async def _upload(

@@ -25,7 +25,19 @@ class CommentsAPI(BaseAPI):
         reply_limit: int = 2,
         order: CommentOrder = CommentOrder.DESC,
     ) -> PaginatedResponse[Comment]:
-        """Get comments for a post."""
+        """Get comments for a post.
+
+        Args:
+            username: Blog username.
+            post_id: Post ID.
+            limit: Batch size limit.
+            offset: Offset cursor string.
+            reply_limit: Number of nested replies to fetch.
+            order: Sorting order (default: DESC).
+
+        Returns:
+            PaginatedResponse with list of Comment instances.
+        """
         params: dict[str, Any] = {
             "limit": limit,
             "reply_limit": reply_limit,
@@ -52,6 +64,9 @@ class CommentsAPI(BaseAPI):
             post_id: Post ID.
             text: Comment text.
             reply_to: Comment ID to reply to (optional).
+
+        Returns:
+            Newly created Comment model instance.
         """
         text_block = {
             "type": "text",
@@ -103,7 +118,17 @@ class CommentsAPI(BaseAPI):
         limit: int = 20,
         order: CommentOrder = CommentOrder.DESC,
     ) -> AsyncIterator[Comment]:
-        """Async iterate over all comments for a post."""
+        """Async iterate over all comments for a post.
+
+        Args:
+            username: Blog username.
+            post_id: Post ID.
+            limit: Batch size per page.
+            order: Sorting order (default: DESC).
+
+        Yields:
+            Comment models across all pages.
+        """
         offset: str | None = None
         while True:
             page = await self.get_comments(
