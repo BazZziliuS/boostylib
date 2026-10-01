@@ -36,4 +36,5 @@ class TestSubscriptionStatus:
             currency="RUB",
         )
         assert status.is_subscribed is True
+        assert status.level is not None
         assert status.level.name == "Pro"

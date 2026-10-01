@@ -29,6 +29,12 @@ class EventDispatcher:
             @dispatcher.on(EventType.NEW_DONATION)
             async def handle_donation(event: DonationEvent):
                 print(event.amount)
+
+        Args:
+            event_type: Type of event to listen for.
+
+        Returns:
+            Decorator function that registers and returns the handler.
         """
 
         def decorator(func: EventHandler) -> EventHandler:
@@ -38,11 +44,20 @@ class EventDispatcher:
         return decorator
 
     def register(self, event_type: EventType, handler: EventHandler) -> None:
-        """Programmatically register a handler."""
+        """Programmatically register a handler.
+
+        Args:
+            event_type: Type of event to subscribe to.
+            handler: Async callback function.
+        """
         self._handlers[event_type].append(handler)
 
     async def dispatch(self, event: Event) -> None:
-        """Dispatch an event to all registered handlers."""
+        """Dispatch an event to all registered handlers.
+
+        Args:
+            event: Event instance to route to handlers.
+        """
         handlers = self._handlers.get(event.type, [])
         for handler in handlers:
             try:

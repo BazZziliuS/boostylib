@@ -2,34 +2,52 @@ name: CI
 
 on:
   push:
-    branches: [main]
+    branches: [main, master]
   pull_request:
-    branches: [main]
+    branches: [main, master]
 
 jobs:
   lint:
+    name: Ruff & Lint
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v4
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
         with:
-          version: "latest"
-      - run: uv sync --extra dev
-      - run: uv run ruff check src/ tests/
-      - run: uv run ruff format --check src/ tests/
+          enable-cache: true
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Run Ruff check & format
+        run: |
+          uv run ruff check src/ tests/
+          uv run ruff format --check src/ tests/
 
   test:
+    name: Test & Typecheck (Python ${{ matrix.python-version }})
     runs-on: ubuntu-latest
-    needs: lint
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12", "3.13", "3.14"]
     steps:
       - uses: actions/checkout@v4
-      - uses: astral-sh/setup-uv@v4
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
         with:
-          version: "latest"
-      - run: uv sync --extra dev
-      - run: uv run pytest -m "unit or integration" --cov --cov-report=xml -v
-      - uses: codecov/codecov-action@v4
-        if: always()
+          enable-cache: true
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
         with:
-          file: ./coverage.xml
-        continue-on-error: true
+          python-version: ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: |
+          uv sync --extra dev --python ${{ matrix.python-version }}
+      - name: Run mypy
+        run: |
+          uv run mypy src/ tests/
+      - name: Run tests
+        run: |
+          uv run pytest -m "unit or integration" --cov=src/boostylib --cov-report=xml

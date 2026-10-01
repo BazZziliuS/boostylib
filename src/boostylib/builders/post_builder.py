@@ -37,12 +37,26 @@ class PostBuilder:
         self._scheduled_at: datetime | None = None
 
     def title(self, title: str) -> Self:
-        """Set the post title."""
+        """Set the post title.
+
+        Args:
+            title: Title text for the post.
+
+        Returns:
+            PostBuilder instance for method chaining.
+        """
         self._title = title
         return self
 
     def text(self, content: str) -> Self:
-        """Add a text content block."""
+        """Add a text content block.
+
+        Args:
+            content: Text body content.
+
+        Returns:
+            PostBuilder instance for method chaining.
+        """
         self._content.append(ContentBlock(type=ContentType.TEXT, content=content))
         return self
 
@@ -53,17 +67,42 @@ class PostBuilder:
         file_path: str | None = None,
         media_id: str | None = None,
     ) -> Self:
-        """Add an image content block."""
+        """Add an image content block.
+
+        Args:
+            url: Direct image URL.
+            file_path: Local filesystem path to upload.
+            media_id: ID of pre-uploaded media.
+
+        Returns:
+            PostBuilder instance for method chaining.
+        """
         self._content.append(ContentBlock(type=ContentType.IMAGE, url=url or media_id or file_path))
         return self
 
     def video(self, *, url: str | None = None, media_id: str | None = None) -> Self:
-        """Add a video content block."""
+        """Add a video content block.
+
+        Args:
+            url: Video URL.
+            media_id: ID of pre-uploaded media.
+
+        Returns:
+            PostBuilder instance for method chaining.
+        """
         self._content.append(ContentBlock(type=ContentType.VIDEO, url=url or media_id))
         return self
 
     def audio(self, *, url: str | None = None, media_id: str | None = None) -> Self:
-        """Add an audio content block."""
+        """Add an audio content block.
+
+        Args:
+            url: Audio URL.
+            media_id: ID of pre-uploaded media.
+
+        Returns:
+            PostBuilder instance for method chaining.
+        """
         self._content.append(ContentBlock(type=ContentType.AUDIO, url=url or media_id))
         return self
 
@@ -75,7 +114,17 @@ class PostBuilder:
         size: int | None = None,
         file_path: str | None = None,
     ) -> Self:
-        """Add a file content block."""
+        """Add a file content block.
+
+        Args:
+            media_id: ID of pre-uploaded file.
+            filename: Display filename.
+            size: File size in bytes.
+            file_path: Local path for upload.
+
+        Returns:
+            PostBuilder instance for method chaining.
+        """
         self._content.append(
             ContentBlock(
                 type=ContentType.FILE,
@@ -86,52 +135,107 @@ class PostBuilder:
         return self
 
     def link(self, *, url: str, title: str | None = None) -> Self:
-        """Add a link content block."""
+        """Add a link content block.
+
+        Args:
+            url: Target URL.
+            title: Optional link display title.
+
+        Returns:
+            PostBuilder instance for method chaining.
+        """
         self._content.append(ContentBlock(type=ContentType.LINK, url=url, content=title))
         return self
 
     def free(self) -> Self:
-        """Set post as free for everyone."""
+        """Set post as free for everyone.
+
+        Returns:
+            PostBuilder instance for method chaining.
+        """
         self._access_type = PostAccess.FREE
         self._access_level_id = None
         self._min_donation_amount = None
         return self
 
     def access_level(self, *, level_id: str) -> Self:
-        """Restrict post to a subscription level and above."""
+        """Restrict post to a subscription level and above.
+
+        Args:
+            level_id: Subscription level identifier.
+
+        Returns:
+            PostBuilder instance for method chaining.
+        """
         self._access_type = PostAccess.SUBSCRIPTION
         self._access_level_id = level_id
         return self
 
     def minimum_donation(self, *, amount: int, currency: str = "RUB") -> Self:
-        """Restrict post to users who donated at least the specified amount."""
+        """Restrict post to users who donated at least the specified amount.
+
+        Args:
+            amount: Minimum donation amount required.
+            currency: Currency code (default: RUB).
+
+        Returns:
+            PostBuilder instance for method chaining.
+        """
         self._access_type = PostAccess.DONATION
         self._min_donation_amount = amount
         self._min_donation_currency = currency
         return self
 
     def subscribers_only(self) -> Self:
-        """Restrict post to any subscribers (any paid level)."""
+        """Restrict post to any subscribers (any paid level).
+
+        Returns:
+            PostBuilder instance for method chaining.
+        """
         self._access_type = PostAccess.SUBSCRIPTION
         return self
 
     def tags(self, tags: list[str]) -> Self:
-        """Set post tags."""
+        """Set post tags.
+
+        Args:
+            tags: List of tag strings.
+
+        Returns:
+            PostBuilder instance for method chaining.
+        """
         self._tags = tags
         return self
 
     def teaser(self, text: str) -> Self:
-        """Set teaser text shown to non-subscribers."""
+        """Set teaser text shown to non-subscribers.
+
+        Args:
+            text: Teaser description text.
+
+        Returns:
+            PostBuilder instance for method chaining.
+        """
         self._teaser = text
         return self
 
     def scheduled_at(self, dt: datetime) -> Self:
-        """Schedule the post for later publication."""
+        """Schedule the post for later publication.
+
+        Args:
+            dt: Target publication datetime.
+
+        Returns:
+            PostBuilder instance for method chaining.
+        """
         self._scheduled_at = dt
         return self
 
     def build(self) -> PostCreateRequest:
         """Build the PostCreateRequest.
+
+        Returns:
+            Constructed PostCreateRequest instance.
 
         Raises:
             ValueError: If title or content is missing.

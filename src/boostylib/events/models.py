@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from datetime import datetime
+from typing import Any
 
 from pydantic import BaseModel
 
@@ -33,7 +34,7 @@ class SubscriptionEvent(Event):
     """Fired on subscription changes."""
 
     user: User
-    level: SubscriptionLevel | dict
+    level: SubscriptionLevel | dict[str, Any]
     welcome_post_id: str | None = None
 
 

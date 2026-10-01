@@ -35,5 +35,7 @@ Thumbs.db
 
 # Temp
 *.tmp
+logs/
+*.log
 
 TECHNICAL_SPEC.md.claude/

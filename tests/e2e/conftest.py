@@ -4,11 +4,22 @@ from __future__ import annotations
 
 import os
 from collections.abc import AsyncIterator
+from pathlib import Path
 
 import pytest
 
 from boostylib import BoostyClient, BoostySettings
 from boostylib.auth import EnvTokenStorage
+
+# Automatically load .env file if present
+_env_file = Path(".env")
+if _env_file.exists():
+    for line in _env_file.read_text(encoding="utf-8").splitlines():
+        line = line.strip()
+        if line and not line.startswith("#") and "=" in line:
+            key, val = line.split("=", 1)
+            val = val.strip().strip('"').strip("'")
+            os.environ.setdefault(key.strip(), val)
 
 
 def _has_credentials() -> bool:

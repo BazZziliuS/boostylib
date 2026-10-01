@@ -27,7 +27,7 @@ class TestContentBlock:
     def test_frozen(self) -> None:
         block = ContentBlock(type=ContentType.TEXT, content="Hello")
         with pytest.raises(Exception):  # noqa: B017
-            block.content = "World"  # type: ignore[misc]
+            block.content = "World"
 
 
 class TestAccessLevel:
@@ -48,7 +48,7 @@ class TestPost:
         post = Post(
             id="123",
             title="Test",
-            created_at=datetime(2026, 1, 1, tzinfo=UTC),
+            createdAt=datetime(2026, 1, 1, tzinfo=UTC),
         )
         assert post.id == "123"
         assert post.tags == []
@@ -60,11 +60,11 @@ class TestPost:
         post = Post(
             id="456",
             title="Full post",
-            content=[
+            data=[
                 ContentBlock(type=ContentType.TEXT, content="Paragraph"),
                 ContentBlock(type=ContentType.IMAGE, url="https://img.jpg"),
             ],
-            created_at=datetime(2026, 1, 1, tzinfo=UTC),
+            createdAt=datetime(2026, 1, 1, tzinfo=UTC),
             tags=[PostTag(id=1, title="test")],
         )
         assert len(post.content) == 2

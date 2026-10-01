@@ -28,7 +28,7 @@ def _make_donation_event() -> DonationEvent:
 class TestEventDispatcher:
     async def test_register_and_dispatch(self) -> None:
         dispatcher = EventDispatcher()
-        received: list = []
+        received: list[DonationEvent] = []
 
         @dispatcher.on(EventType.NEW_DONATION)
         async def handler(event: DonationEvent) -> None:
@@ -75,7 +75,7 @@ class TestEventDispatcher:
 
     async def test_programmatic_register(self) -> None:
         dispatcher = EventDispatcher()
-        received: list = []
+        received: list[int] = []
 
         async def handler(event: DonationEvent) -> None:
             received.append(event.amount)

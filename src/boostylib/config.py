@@ -35,6 +35,18 @@ class BoostySettings(BaseSettings):
         dotenv_settings: PydanticBaseSettingsSource,
         file_secret_settings: PydanticBaseSettingsSource,
     ) -> tuple[PydanticBaseSettingsSource, ...]:
+        """Customise settings sources to include TOML configuration if available.
+
+        Args:
+            settings_cls: BaseSettings class.
+            init_settings: Init settings source.
+            env_settings: Environment variables settings source.
+            dotenv_settings: Dotenv settings source.
+            file_secret_settings: File secret settings source.
+
+        Returns:
+            Tuple of prioritized settings sources.
+        """
         sources: list[PydanticBaseSettingsSource] = [
             init_settings,
             env_settings,

@@ -12,7 +12,11 @@ class UsersAPI(BaseAPI):
     """Endpoints for user-related operations."""
 
     async def get_current_user(self) -> User:
-        """Get the currently authenticated user."""
+        """Get the currently authenticated user.
+
+        Returns:
+            User model instance for the authenticated account.
+        """
         data = await self._get("/user/current")
         return User.model_validate(data)
 
@@ -22,7 +26,15 @@ class UsersAPI(BaseAPI):
         limit: int = 30,
         with_follow: bool = False,
     ) -> list[dict[str, Any]]:
-        """Get the current user's subscriptions."""
+        """Get the current user's subscriptions.
+
+        Args:
+            limit: Maximum number of subscriptions to return.
+            with_follow: Whether to include followed blogs.
+
+        Returns:
+            List of subscription dictionaries.
+        """
         data = await self._get(
             "/user/subscriptions",
             params={"limit": limit, "with_follow": with_follow},

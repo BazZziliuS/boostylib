@@ -30,7 +30,20 @@ class PostsAPI(BaseAPI):
         from_ts: int | None = None,
         to_ts: int | None = None,
     ) -> PaginatedResponse[Post]:
-        """List posts with filtering and pagination."""
+        """List posts with filtering and pagination.
+
+        Args:
+            username: Blog username.
+            limit: Page size limit.
+            offset: Pagination cursor.
+            level_id: Optional subscription level filter.
+            tags_ids: Optional list of tag IDs.
+            from_ts: Timestamp lower bound.
+            to_ts: Timestamp upper bound.
+
+        Returns:
+            PaginatedResponse with list of Post instances.
+        """
         params: dict[str, Any] = {"limit": limit}
         if offset is not None:
             params["offset"] = offset
@@ -53,7 +66,16 @@ class PostsAPI(BaseAPI):
         limit: int = 20,
         level_id: str | None = None,
     ) -> AsyncIterator[Post]:
-        """Async iterate over all posts."""
+        """Async iterate over all posts.
+
+        Args:
+            username: Blog username.
+            limit: Page batch limit.
+            level_id: Optional subscription level filter.
+
+        Yields:
+            Post instances across all pages.
+        """
         params: dict[str, Any] = {}
         if level_id is not None:
             params["level_id"] = level_id
@@ -63,7 +85,15 @@ class PostsAPI(BaseAPI):
             yield post
 
     async def get_post(self, username: str, post_id: str) -> Post:
-        """Get a single post by ID."""
+        """Get a single post by ID.
+
+        Args:
+            username: Blog username.
+            post_id: Identifier of target post.
+
+        Returns:
+            Post model instance.
+        """
         data = await self._get(f"/blog/{username}/post/{post_id}")
         return Post.model_validate(data)
 
@@ -107,6 +137,10 @@ class PostsAPI(BaseAPI):
     async def save_draft(self, username: str, post: PostCreateRequest) -> dict[str, Any]:
         """Save a post as draft without publishing.
 
+        Args:
+            username: Blog username.
+            post: Post content and configuration to save.
+
         Returns:
             Raw draft response data.
         """
@@ -127,6 +161,10 @@ class PostsAPI(BaseAPI):
     ) -> Post:
         """Publish the current draft.
 
+        Args:
+            username: Blog username.
+            is_showcase_visible: Show in showcase after publishing.
+
         Returns:
             The published Post.
         """
@@ -141,7 +179,16 @@ class PostsAPI(BaseAPI):
         return Post.model_validate(post_data)
 
     async def update_post(self, username: str, post_id: str, post: PostCreateRequest) -> Post:
-        """Update an existing post."""
+        """Update an existing post.
+
+        Args:
+            username: Blog username.
+            post_id: Target post identifier.
+            post: Updated post payload.
+
+        Returns:
+            Updated Post model instance.
+        """
         form_data = self._build_draft_form(post)
         response = await self._transport.request(
             "PUT",
@@ -153,7 +200,12 @@ class PostsAPI(BaseAPI):
         return Post.model_validate(data.get("data", {}).get("post", data))
 
     async def delete_post(self, username: str, post_id: str) -> None:
-        """Delete a post."""
+        """Delete a post.
+
+        Args:
+            username: Blog username.
+            post_id: Identifier of post to delete.
+        """
         await self._transport.request("DELETE", f"/blog/{username}/post/{post_id}")
 
     def _build_draft_form(self, post: PostCreateRequest) -> dict[str, str]:
