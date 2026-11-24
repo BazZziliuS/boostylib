@@ -112,9 +112,7 @@ class DonationsAPI(BaseAPI):
 
         return result
 
-    async def iter_donation_messages(
-        self, *, limit: int = 20
-    ) -> AsyncIterator[DonationMessage]:
+    async def iter_donation_messages(self, *, limit: int = 20) -> AsyncIterator[DonationMessage]:
         """Async iterate over all donation messages across all dialogs.
 
         Yields:
@@ -122,9 +120,7 @@ class DonationsAPI(BaseAPI):
         """
         offset = 0
         while True:
-            data = await self._get(
-                "/dialog/", params={"limit": limit, "offset": offset}
-            )
+            data = await self._get("/dialog/", params={"limit": limit, "offset": offset})
             dialogs = data.get("data", [])
             total = data.get("extra", {}).get("total", 0)
 
@@ -163,9 +159,7 @@ class DonationsAPI(BaseAPI):
         Returns:
             List of all donations in this dialog.
         """
-        data = await self._get(
-            f"/dialog/{dialog_id}/message/", params={"limit": 100}
-        )
+        data = await self._get(f"/dialog/{dialog_id}/message/", params={"limit": 100})
         messages = data.get("data", [])
         result: list[DonationMessage] = []
 

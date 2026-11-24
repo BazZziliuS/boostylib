@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/).
 
+## [1.1.1] — 2026-11-24
+
+### Changed
+
+- Minimum supported Python lowered to **3.11** (tested on 3.11–3.14)
+- `enums` and `http.exceptions` split into granular submodules (public imports unchanged)
+- Strict mypy-compatible type annotations across the codebase
+- Google-style docstrings for all API client modules
+
+### Fixed
+
+- Exception handling syntax compatible with Python 3.11
+- CI: Ruff job now installs dev extras
+
 ## [1.1.0] — 2026-03-21
 
 ### Added

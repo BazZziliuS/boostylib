@@ -22,8 +22,8 @@ jobs:
           python-version: "3.11"
       - name: Run Ruff check & format
         run: |
-          uv run ruff check src/ tests/
-          uv run ruff format --check src/ tests/
+          uv run --extra dev ruff check src/ tests/
+          uv run --extra dev ruff format --check src/ tests/
 
   test:
     name: Test & Typecheck (Python ${{ matrix.python-version }})
